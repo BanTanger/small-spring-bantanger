@@ -20,13 +20,13 @@ public class ApiTest {
         BeanDefinition beanDefinition = new BeanDefinition(UserService.class);
         beanFactory.registerBeanDefinition("userService", beanDefinition);
 
-        // 3. 第一次获取 Bean
+        // 3. 无参 Bean
         UserService userService = (UserService) beanFactory.getBean("userService");
         userService.queryUserInfo();
 
-        // 4. 第二次获取 Bean (通过单例对象缓存)
-        UserService userService_singleton = (UserService) beanFactory.getBean("userService");
-        userService_singleton.queryUserInfo();
+        // 4. 有参 Bean 有 bug, bean 没法区分有参无参
+        UserService userService_args = (UserService) beanFactory.getBean("userService", "半糖");
+        userService_args.queryUserInfo();
     }
 
 }

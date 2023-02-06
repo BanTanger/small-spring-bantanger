@@ -2,6 +2,7 @@ package com.bantanger.springframework.factory.config;
 
 /**
  * 用于定义 Bean 实例化信息 Spring容器只存储 Bean 对象类型信息
+ *
  * @author BanTanger 半糖
  * @Date 2023/2/6 17:14
  */
