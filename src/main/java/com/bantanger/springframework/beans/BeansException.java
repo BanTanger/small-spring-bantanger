@@ -1,4 +1,4 @@
-package com.bantanger.springframework;
+package com.bantanger.springframework.beans;
 
 /**
  * 定义 Bean 统一异常

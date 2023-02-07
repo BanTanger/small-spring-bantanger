@@ -1,4 +1,6 @@
-package com.bantanger.springframework;
+package com.bantanger.springframework.beans.factory;
+
+import com.bantanger.springframework.beans.BeansException;
 
 /**
  * 定义 Bean 工厂职责，实现交给具体实现类

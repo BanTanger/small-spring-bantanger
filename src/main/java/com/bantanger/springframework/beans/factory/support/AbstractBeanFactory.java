@@ -1,8 +1,8 @@
-package com.bantanger.springframework.factory.support;
+package com.bantanger.springframework.beans.factory.support;
 
-import com.bantanger.springframework.BeanFactory;
-import com.bantanger.springframework.BeansException;
-import com.bantanger.springframework.factory.config.BeanDefinition;
+import com.bantanger.springframework.beans.factory.BeanFactory;
+import com.bantanger.springframework.beans.BeansException;
+import com.bantanger.springframework.beans.factory.config.BeanDefinition;
 
 /**
  * 抽象类实现 BeanFactory, 使用模板模式统一通用核心方法调度

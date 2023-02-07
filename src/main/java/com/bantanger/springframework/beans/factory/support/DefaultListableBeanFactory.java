@@ -1,7 +1,7 @@
-package com.bantanger.springframework.factory.support;
+package com.bantanger.springframework.beans.factory.support;
 
-import com.bantanger.springframework.BeansException;
-import com.bantanger.springframework.factory.config.BeanDefinition;
+import com.bantanger.springframework.beans.BeansException;
+import com.bantanger.springframework.beans.factory.config.BeanDefinition;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.bantanger.springframework.factory.config;
+package com.bantanger.springframework.beans.factory.config;
 
 /**
  * 定义单例 bean 对象接口

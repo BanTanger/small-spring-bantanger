@@ -7,31 +7,36 @@ package com.bantanger.springframework.test.bean;
  */
 public class UserService {
 
-    private String name;
+    private String uId;
+
+    private UserDao userDao;
 
     public UserService() {
     }
 
-    public UserService(String name) {
-        this.name = name;
+    public UserService(String uId, UserDao userDao) {
+        this.uId = uId;
+        this.userDao = userDao;
     }
 
     public void queryUserInfo() {
-        System.out.println("模拟Bean:UserService -- 查询用户信息: " + name);
+        System.out.println("模拟Bean:UserService -- 查询用户信息: " + userDao.queryUserName(uId));
     }
 
-    public String getName() {
-        return name;
+    public String getuId() {
+        return uId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setuId(String uId) {
+        this.uId = uId;
     }
 
-    @Override
-    public String toString() {
-        return "UserService{" +
-                "name='" + name + '\'' +
-                '}';
+    public UserDao getUserDao() {
+        return userDao;
     }
+
+    public void setUserDao(UserDao userDao) {
+        this.userDao = userDao;
+    }
+
 }

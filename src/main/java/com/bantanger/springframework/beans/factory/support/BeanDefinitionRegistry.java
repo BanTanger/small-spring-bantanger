@@ -1,6 +1,6 @@
-package com.bantanger.springframework.factory.support;
+package com.bantanger.springframework.beans.factory.support;
 
-import com.bantanger.springframework.factory.config.BeanDefinition;
+import com.bantanger.springframework.beans.factory.config.BeanDefinition;
 
 /**
  * bean对象定义信息注册接口

@@ -1,7 +1,11 @@
-package com.bantanger.springframework.factory.support;
+package com.bantanger.springframework.beans.factory.support;
 
-import com.bantanger.springframework.BeansException;
-import com.bantanger.springframework.factory.config.BeanDefinition;
+import cn.hutool.core.bean.BeanUtil;
+import com.bantanger.springframework.beans.BeansException;
+import com.bantanger.springframework.beans.PropertyValue;
+import com.bantanger.springframework.beans.PropertyValues;
+import com.bantanger.springframework.beans.factory.config.BeanDefinition;
+import com.bantanger.springframework.beans.factory.config.BeanReference;
 
 import java.lang.reflect.Constructor;
 
@@ -22,6 +26,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         try {
             // 从 BeanDefinition 获取 Bean 的类信息，实例化完整的类: 有参无参均可
             bean = createBeanInstance(beanDefinition, beanName, args);
+            // 属性注入
+            applyPropertyValues(beanName, bean, beanDefinition);
         } catch (Exception e) {
             throw new BeansException("Instantiation of bean failed -- 实例化容器失败", e);
         }
@@ -44,6 +50,37 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         return getInstantiationStrategy().instantiate(beanDefinition, beanName, constructorToUse, args);
     }
 
+    /**
+     * Bean 属性填充
+     *
+     * @param beanName       bean对象名称
+     * @param bean           bean对象
+     * @param beanDefinition bean对象定义
+     */
+    protected void applyPropertyValues(String beanName, Object bean, BeanDefinition beanDefinition) {
+        try {
+            PropertyValues propertyValues = beanDefinition.getPropertyValues();
+            for (PropertyValue propertyValue : propertyValues.getPropertyValues()) {
+
+                String name = propertyValue.getName();
+                Object value = propertyValue.getValue();
+
+                if (value instanceof BeanReference) {
+                    // 如果遇到的是 BeanReference 类型的 value，说明是非基本类型，需要递归获取 Bean 实例，调用 getBean 方法
+                    // A 依赖 B，先获取 B 的对象实例
+                    BeanReference beanReference = (BeanReference) value;
+                    // 递归获取 Bean 实例
+                    value = getBean(beanReference.getBeanName());
+                }
+                // TODO 属性填充，并没有处理循环依赖的问题
+                BeanUtil.setFieldValue(bean, name, value);
+            }
+        } catch (Exception e) {
+            throw new BeansException("Error setting property values：" + beanName
+                    + " -- " + beanName + " 的属性值设置错误");
+        }
+    }
+
     protected InstantiationStrategy getInstantiationStrategy() {
         return instantiationStrategy;
     }
@@ -51,4 +88,5 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     public void setInstantiationStrategy(InstantiationStrategy instantiationStrategy) {
         this.instantiationStrategy = instantiationStrategy;
     }
+
 }
