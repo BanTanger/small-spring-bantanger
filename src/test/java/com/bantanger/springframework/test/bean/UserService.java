@@ -11,16 +11,8 @@ public class UserService {
 
     private UserDao userDao;
 
-    public UserService() {
-    }
-
-    public UserService(String uId, UserDao userDao) {
-        this.uId = uId;
-        this.userDao = userDao;
-    }
-
-    public void queryUserInfo() {
-        System.out.println("模拟Bean:UserService -- 查询用户信息: " + userDao.queryUserName(uId));
+    public String queryUserInfo() {
+        return userDao.queryUserName(uId);
     }
 
     public String getuId() {

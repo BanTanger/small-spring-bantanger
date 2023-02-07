@@ -1,7 +1,4 @@
-package com.bantanger.springframework.beans;
-
-import com.bantanger.springframework.beans.factory.config.BeanDefinition;
-import com.bantanger.springframework.beans.factory.config.BeanReference;
+package com.bantanger.springframework.beans.factory.config;
 
 import java.util.ArrayList;
 import java.util.List;

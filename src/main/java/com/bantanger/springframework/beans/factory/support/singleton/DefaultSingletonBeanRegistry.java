@@ -1,6 +1,6 @@
-package com.bantanger.springframework.beans.factory.support;
+package com.bantanger.springframework.beans.factory.support.singleton;
 
-import com.bantanger.springframework.beans.factory.config.SingletonBeanRegistry;
+import com.bantanger.springframework.beans.factory.support.singleton.SingletonBeanRegistry;
 
 import java.util.HashMap;
 import java.util.Map;

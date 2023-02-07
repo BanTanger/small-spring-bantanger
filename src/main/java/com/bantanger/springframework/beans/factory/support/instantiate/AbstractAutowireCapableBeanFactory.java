@@ -1,11 +1,13 @@
-package com.bantanger.springframework.beans.factory.support;
+package com.bantanger.springframework.beans.factory.support.instantiate;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.bantanger.springframework.beans.BeansException;
-import com.bantanger.springframework.beans.PropertyValue;
-import com.bantanger.springframework.beans.PropertyValues;
+import com.bantanger.springframework.beans.exception.BeansException;
+import com.bantanger.springframework.beans.factory.config.PropertyValue;
+import com.bantanger.springframework.beans.factory.config.PropertyValues;
 import com.bantanger.springframework.beans.factory.config.BeanDefinition;
 import com.bantanger.springframework.beans.factory.config.BeanReference;
+import com.bantanger.springframework.beans.factory.support.strategy.CglibSubclassingInstantiationStrategy;
+import com.bantanger.springframework.beans.factory.support.strategy.InstantiationStrategy;
 
 import java.lang.reflect.Constructor;
 

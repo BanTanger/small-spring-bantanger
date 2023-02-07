@@ -1,6 +1,6 @@
 package com.bantanger.springframework.beans.factory;
 
-import com.bantanger.springframework.beans.BeansException;
+import com.bantanger.springframework.beans.exception.BeansException;
 
 /**
  * 定义 Bean 工厂职责，实现交给具体实现类
@@ -28,5 +28,16 @@ public interface BeanFactory {
      * @throws BeansException 自定义 Bean 异常处理
      */
     Object getBean(String name, Object... args) throws BeansException;
+
+    /**
+     * 获取 Bean 实例对象
+     *
+     * @param name         注册 Bean 的实例对象名称
+     * @param requiredType 需求类型
+     * @param <T>          泛型
+     * @return 类型
+     * @throws BeansException 自定义 Bean 异常处理
+     */
+    <T> T getBean(String name, Class<T> requiredType) throws BeansException;
 
 }

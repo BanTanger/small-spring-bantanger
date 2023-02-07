@@ -1,4 +1,4 @@
-package com.bantanger.springframework.beans;
+package com.bantanger.springframework.beans.exception;
 
 /**
  * 定义 Bean 统一异常

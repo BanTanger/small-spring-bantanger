@@ -1,4 +1,4 @@
-package com.bantanger.springframework.beans;
+package com.bantanger.springframework.beans.factory.config;
 
 /**
  * Bean 属性信息

@@ -1,4 +1,4 @@
-package com.bantanger.springframework.beans.factory.config;
+package com.bantanger.springframework.beans.factory.support.singleton;
 
 /**
  * 定义单例 bean 对象接口
