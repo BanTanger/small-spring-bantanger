@@ -1,4 +1,4 @@
-package com.bantanger.springframework.beans.factory.config;
+package com.bantanger.springframework.beans.factory.config.definition;
 
 /**
  * 用于定义 Bean 实例化信息 Spring容器只存储 Bean 对象类型信息

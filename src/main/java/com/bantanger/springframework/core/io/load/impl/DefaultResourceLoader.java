@@ -14,6 +14,7 @@ import java.net.URL;
  * 包装资源加载器
  * 在获取资源的实现中，将三种不同类型的资源处理方式做了包装
  * 依次判断是否为 ClassPath、URL、File
+ *
  * @author BanTanger 半糖
  * @Date 2023/2/7 13:38
  */

@@ -10,4 +10,8 @@
         <property name="userDao" ref="userDao"/>
     </bean>
 
+    <!-- 设置后置处理器 -->
+    <bean class="com.bantanger.springframework.test.common.MyBeanPostProcessor"/>
+    <bean class="com.bantanger.springframework.test.common.MyBeanFactoryPostProcessor"/>
+
 </beans>

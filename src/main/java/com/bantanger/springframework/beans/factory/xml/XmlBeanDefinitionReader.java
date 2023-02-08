@@ -3,9 +3,9 @@ package com.bantanger.springframework.beans.factory.xml;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.XmlUtil;
 import com.bantanger.springframework.beans.exception.BeansException;
-import com.bantanger.springframework.beans.factory.config.BeanDefinition;
-import com.bantanger.springframework.beans.factory.config.BeanReference;
-import com.bantanger.springframework.beans.factory.config.PropertyValue;
+import com.bantanger.springframework.beans.factory.config.definition.BeanDefinition;
+import com.bantanger.springframework.beans.factory.config.definition.BeanReference;
+import com.bantanger.springframework.beans.factory.config.definition.PropertyValue;
 import com.bantanger.springframework.beans.factory.support.read.impl.AbstractBeanDefinitionReader;
 import com.bantanger.springframework.beans.factory.support.registry.BeanDefinitionRegistry;
 import com.bantanger.springframework.core.io.load.ResourceLoader;
@@ -63,6 +63,13 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
         loadBeanDefinitions(resource);
     }
 
+    @Override
+    public void loadBeanDefinitions(String... locations) throws BeansException {
+        for (String location : locations) {
+            loadBeanDefinitions(location);
+        }
+    }
+
     /**
      * 读取 XML 配置信息，并将其加载到 beanDefinition
      *
@@ -105,7 +112,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             // 读取属性并填充
             for (int j = 0; j < bean.getChildNodes().getLength(); j++) {
                 // 判断元素
-                if (!(childNodes.item(j) instanceof Element)) {
+                if (!(bean.getChildNodes().item(j) instanceof Element)) {
                     continue;
                 }
                 // 判断对象

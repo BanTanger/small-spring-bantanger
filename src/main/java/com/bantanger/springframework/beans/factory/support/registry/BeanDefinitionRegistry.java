@@ -1,7 +1,7 @@
 package com.bantanger.springframework.beans.factory.support.registry;
 
 import com.bantanger.springframework.beans.exception.BeansException;
-import com.bantanger.springframework.beans.factory.config.BeanDefinition;
+import com.bantanger.springframework.beans.factory.config.definition.BeanDefinition;
 
 /**
  * bean对象定义信息注册接口

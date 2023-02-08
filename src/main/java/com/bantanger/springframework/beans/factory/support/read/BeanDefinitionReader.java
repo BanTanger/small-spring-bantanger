@@ -5,6 +5,8 @@ import com.bantanger.springframework.beans.factory.support.registry.BeanDefiniti
 import com.bantanger.springframework.core.io.load.ResourceLoader;
 import com.bantanger.springframework.core.io.resource.Resource;
 
+import java.beans.Beans;
+
 /**
  * Bean 定义读取接口
  * 读取 Spring 配置文件中的内容，将其解析到 BeanDefinition 并注册到 BeanDefinitionRegistry 工厂
@@ -47,5 +49,12 @@ public interface BeanDefinitionReader {
      * @throws BeansException 自定义 Bean 异常
      */
     void loadBeanDefinitions(String location) throws BeansException;
+
+    /**
+     * 指定资源路径加载 Bean 定义方法
+     * @param locations 资源路径列表
+     * @throws BeansException 自定义 Bean 异常
+     */
+    void loadBeanDefinitions(String... locations) throws BeansException;
 
 }

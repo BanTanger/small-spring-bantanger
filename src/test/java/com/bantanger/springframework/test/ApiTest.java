@@ -1,17 +1,20 @@
 package com.bantanger.springframework.test;
 
 import cn.hutool.core.io.IoUtil;
-import com.bantanger.springframework.beans.factory.config.PropertyValue;
-import com.bantanger.springframework.beans.factory.config.PropertyValues;
-import com.bantanger.springframework.beans.factory.config.BeanDefinition;
-import com.bantanger.springframework.beans.factory.config.BeanReference;
+import com.bantanger.springframework.beans.factory.config.definition.PropertyValue;
+import com.bantanger.springframework.beans.factory.config.definition.PropertyValues;
+import com.bantanger.springframework.beans.factory.config.definition.BeanDefinition;
+import com.bantanger.springframework.beans.factory.config.definition.BeanReference;
 import com.bantanger.springframework.beans.factory.support.registry.DefaultListableBeanFactory;
 import com.bantanger.springframework.beans.factory.xml.XmlBeanDefinitionReader;
+import com.bantanger.springframework.context.support.ClassPathXmlApplicationContext;
 import com.bantanger.springframework.core.io.load.impl.DefaultResourceLoader;
 import com.bantanger.springframework.core.io.resource.Resource;
 import com.bantanger.springframework.test.bean.UserDao;
 import com.bantanger.springframework.test.bean.UserService;
 
+import com.bantanger.springframework.test.common.MyBeanFactoryPostProcessor;
+import com.bantanger.springframework.test.common.MyBeanPostProcessor;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -44,7 +47,8 @@ public class ApiTest {
 
         // 5. UserService 获取 bean
         UserService userService = (UserService) beanFactory.getBean("userService");
-        userService.queryUserInfo();
+        String result = userService.queryUserInfo();
+        System.out.println("测试结果：" + result);
 
     }
 
@@ -90,6 +94,40 @@ public class ApiTest {
 
         // 3. 获取Bean对象调用方法
         UserService userService = beanFactory.getBean("userService", UserService.class);
+        String result = userService.queryUserInfo();
+        System.out.println("测试结果：" + result);
+    }
+
+    @Test
+    public void test_BeanFactoryPostProcessorAndBeanPostProcessor_inuseContext() {
+        // 1.初始化 BeanFactory
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+
+        // 2. 读取配置文件&注册 Bean
+        XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(beanFactory);
+        reader.loadBeanDefinitions("classpath:spring.xml");
+
+        // 3. BeanDefinition 加载完成 & Bean实例化之前，修改 BeanDefinition 的属性值
+        MyBeanFactoryPostProcessor beanFactoryPostProcessor = new MyBeanFactoryPostProcessor();
+        beanFactoryPostProcessor.postProcessBeanFactory(beanFactory);
+
+        // 4. Bean 实例化之后，修改 Bean 属性信息
+        MyBeanPostProcessor beanPostProcessor = new MyBeanPostProcessor();
+        beanFactory.addBeanPostProcessor(beanPostProcessor);
+
+        // 5. 获取 Bean 对象调用方法
+        UserService userService = beanFactory.getBean("userService", UserService.class);
+        String result = userService.queryUserInfo();
+        System.out.println("测试结果：" + result);
+    }
+
+    @Test
+    public void test_BeanFactoryPostProcessorAndBeanPostProcessor_useContext() {
+        // 1. 初始化 BeanFactory
+        ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext("classpath:springPostProcessor.xml");
+
+        // 2. 获取 Bean 对象调用方法
+        UserService userService = (UserService) classPathXmlApplicationContext.getBean("userService", UserService.class);
         String result = userService.queryUserInfo();
         System.out.println("测试结果：" + result);
     }

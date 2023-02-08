@@ -1,7 +1,7 @@
 package com.bantanger.springframework.beans.factory.support.strategy;
 
 import com.bantanger.springframework.beans.exception.BeansException;
-import com.bantanger.springframework.beans.factory.config.BeanDefinition;
+import com.bantanger.springframework.beans.factory.config.definition.BeanDefinition;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.NoOp;
 

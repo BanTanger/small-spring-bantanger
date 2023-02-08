@@ -1,17 +1,25 @@
 package com.bantanger.springframework.beans.factory.support.instantiate;
 
-import com.bantanger.springframework.beans.factory.BeanFactory;
 import com.bantanger.springframework.beans.exception.BeansException;
-import com.bantanger.springframework.beans.factory.config.BeanDefinition;
+import com.bantanger.springframework.beans.factory.config.ConfigurableBeanFactory;
+import com.bantanger.springframework.beans.factory.config.definition.BeanDefinition;
+import com.bantanger.springframework.beans.factory.config.processor.BeanPostProcessor;
 import com.bantanger.springframework.beans.factory.support.singleton.DefaultSingletonBeanRegistry;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- * 抽象类实现 BeanFactory, 使用模板模式统一通用核心方法调度
+ * 抽象类实现 BeanFactory, 实现了 ConfigurableBeanFactory
+ * 具有增添和获取 Bean 后置处理器的功能
  *
  * @author BanTanger 半糖
  * @Date 2023/2/6 19:45
  */
-public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements BeanFactory {
+public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
+
+    /** BeanPostProcessors to apply in createBean */
+    private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
 
     @Override
     public Object getBean(String name) throws BeansException {
@@ -60,4 +68,20 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
      * @throws BeansException 自定义 Bean 异常
      */
     protected abstract Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) throws BeansException;
+
+    @Override
+    public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) {
+        // 先 remove 再 add，删除旧值，添加新值，确保只有一个实例
+        this.beanPostProcessors.remove(beanPostProcessor);
+        this.beanPostProcessors.add(beanPostProcessor);
+    }
+
+    /**
+     * Return the list of BeanPostProcessors that will get applied
+     * to beans created with this factory.
+     */
+    public List<BeanPostProcessor> getBeanPostProcessors() {
+        return this.beanPostProcessors;
+    }
+
 }
