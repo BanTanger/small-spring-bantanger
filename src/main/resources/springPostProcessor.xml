@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans>
+
+    <bean id="userDao" class="com.bantanger.springframework.test.bean.UserDao"/>
+
+    <bean id="userService" class="com.bantanger.springframework.test.bean.UserService">
+        <property name="uId" value="10001"/>
+        <property name="company" value="腾讯"/>
+        <property name="location" value="深圳"/>
+        <property name="userDao" ref="userDao"/>
+    </bean>
+
+    <!-- 设置后置处理器 -->
+    <bean class="com.bantanger.springframework.test.common.MyBeanPostProcessor"/>
+    <bean class="com.bantanger.springframework.test.common.MyBeanFactoryPostProcessor"/>
+
+</beans>
