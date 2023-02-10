@@ -1,11 +1,15 @@
 package com.bantanger.springframework.test.bean;
 
+import com.bantanger.springframework.beans.exception.BeansException;
+import com.bantanger.springframework.beans.factory.support.manage.DisposableBean;
+import com.bantanger.springframework.beans.factory.support.manage.InitializingBean;
+
 /**
  * 模拟Bean
  * @author BanTanger 半糖
  * @Date 2023/2/6 17:23
  */
-public class UserService {
+public class UserService implements InitializingBean, DisposableBean {
 
     private String uId;
 
@@ -49,6 +53,16 @@ public class UserService {
 
     public void setUserDao(UserDao userDao) {
         this.userDao = userDao;
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        System.out.println("执行：UserService.destroy");
+    }
+
+    @Override
+    public void afterPropertiesSet() throws BeansException {
+        System.out.println("执行：UserService.afterPropertiesSet");
     }
 
 }

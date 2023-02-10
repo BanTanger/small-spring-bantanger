@@ -1,11 +1,9 @@
 package com.bantanger.springframework.beans.factory.support.read;
 
 import com.bantanger.springframework.beans.exception.BeansException;
-import com.bantanger.springframework.beans.factory.support.registry.BeanDefinitionRegistry;
+import com.bantanger.springframework.beans.factory.config.definition.BeanDefinitionRegistry;
 import com.bantanger.springframework.core.io.load.ResourceLoader;
 import com.bantanger.springframework.core.io.resource.Resource;
-
-import java.beans.Beans;
 
 /**
  * Bean 定义读取接口

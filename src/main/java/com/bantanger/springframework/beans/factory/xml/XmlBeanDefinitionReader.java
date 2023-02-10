@@ -7,7 +7,7 @@ import com.bantanger.springframework.beans.factory.config.definition.BeanDefinit
 import com.bantanger.springframework.beans.factory.config.definition.BeanReference;
 import com.bantanger.springframework.beans.factory.config.definition.PropertyValue;
 import com.bantanger.springframework.beans.factory.support.read.impl.AbstractBeanDefinitionReader;
-import com.bantanger.springframework.beans.factory.support.registry.BeanDefinitionRegistry;
+import com.bantanger.springframework.beans.factory.config.definition.BeanDefinitionRegistry;
 import com.bantanger.springframework.core.io.load.ResourceLoader;
 import com.bantanger.springframework.core.io.resource.Resource;
 import org.w3c.dom.Document;
@@ -99,6 +99,8 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             String id = bean.getAttribute("id");
             String name = bean.getAttribute("name");
             String className = bean.getAttribute("class");
+            String initMethod = bean.getAttribute("init-method");
+            String destroyMethodName = bean.getAttribute("destroy-method");
             // 获取 Class，方便获取类中的名称
             Class<?> aClass = Class.forName(className);
             // 优先级：id > name
@@ -109,6 +111,10 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
             // 定义 Bean
             BeanDefinition beanDefinition = new BeanDefinition(aClass);
+            // init-method, destroy 写在 xml 配置文件里，所以需要处理加载到 BeanDefinition 里
+            beanDefinition.setInitMethodName(initMethod);
+            beanDefinition.setDestroyMethodName(destroyMethodName);
+
             // 读取属性并填充
             for (int j = 0; j < bean.getChildNodes().getLength(); j++) {
                 // 判断元素

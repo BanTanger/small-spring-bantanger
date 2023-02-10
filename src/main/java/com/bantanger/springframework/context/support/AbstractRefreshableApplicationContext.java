@@ -2,7 +2,7 @@ package com.bantanger.springframework.context.support;
 
 import com.bantanger.springframework.beans.exception.BeansException;
 import com.bantanger.springframework.beans.factory.ConfigurableListableBeanFactory;
-import com.bantanger.springframework.beans.factory.support.registry.DefaultListableBeanFactory;
+import com.bantanger.springframework.beans.factory.support.DefaultListableBeanFactory;
 
 /**
  * {@link com.bantanger.springframework.context.ApplicationContext} 实现的基类，
@@ -41,7 +41,6 @@ public abstract class AbstractRefreshableApplicationContext extends AbstractAppl
 
     @Override
     protected ConfigurableListableBeanFactory getBeanFactory() {
-        // 提供已经注册好的 BeanFactory 工厂
         return beanFactory;
     }
 }

@@ -1,6 +1,6 @@
 package com.bantanger.springframework.context.support;
 
-import com.bantanger.springframework.beans.factory.support.registry.DefaultListableBeanFactory;
+import com.bantanger.springframework.beans.factory.support.DefaultListableBeanFactory;
 import com.bantanger.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 
 /**
@@ -16,11 +16,11 @@ public abstract class AbstractXmlApplicationContext extends AbstractRefreshableA
 
     @Override
     protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) {
-        // 1. 从 XML 读取 bean 配置信息
+        // 1. 初始化 XML 读取器
         XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(beanFactory, this);
         // 2. 获取配置信息的地址描述
         String[] configLocations = getConfigLocations();
-        // 3. 将配置信息加载至 beanDefinition 中
+        // 3. 读取信息并将配置信息加载至 beanDefinition 中
         if (null != configLocations) {
             beanDefinitionReader.loadBeanDefinitions(configLocations);
         }

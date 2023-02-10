@@ -1,7 +1,7 @@
 package com.bantanger.springframework.beans.factory.support.read.impl;
 
 import com.bantanger.springframework.beans.factory.support.read.BeanDefinitionReader;
-import com.bantanger.springframework.beans.factory.support.registry.BeanDefinitionRegistry;
+import com.bantanger.springframework.beans.factory.config.definition.BeanDefinitionRegistry;
 import com.bantanger.springframework.core.io.load.ResourceLoader;
 import com.bantanger.springframework.core.io.load.impl.DefaultResourceLoader;
 

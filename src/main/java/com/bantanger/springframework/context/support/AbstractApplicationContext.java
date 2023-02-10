@@ -35,12 +35,27 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         beanFactory.preInstantiateSingletons();
     }
 
+    @Override
+    public void registerShutdownHook() {
+        Runtime.getRuntime().addShutdownHook(new Thread(this::close));
+    }
+
+    @Override
+    public void close() {
+        getBeanFactory().destroySingletons();
+    }
+
     /**
      * 创建 BeanFactory 以及加载 BeanDefinition
      * @throws BeansException
      */
     protected abstract void refreshBeanFactory() throws BeansException;
 
+    /**
+     * 提供已经注册好的 BeanFactory 工厂
+     * 即：已经读取配置信息并将 Bean 定义信息所注册到 BeanFactory 中管理
+     * @return
+     */
     protected abstract ConfigurableListableBeanFactory getBeanFactory();
 
     /**

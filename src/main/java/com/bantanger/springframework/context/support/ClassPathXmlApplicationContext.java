@@ -19,14 +19,14 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
     }
 
     /**
-     * 从 XML 中加载 BeanDefinition，并刷新上下文
+     * 从 XML 中加载 BeanDefinition，并刷新上下文(单个资源读取)
      */
     public ClassPathXmlApplicationContext(String configLocations) throws BeansException {
         this(new String[]{configLocations});
     }
 
     /**
-     * 从 XML 中加载 BeanDefinition，并刷新上下文
+     * 从 XML 中加载 BeanDefinition，并刷新上下文(多个资源读取)
      */
     public ClassPathXmlApplicationContext(String[] configLocations) throws BeansException {
         this.configLocations = configLocations;

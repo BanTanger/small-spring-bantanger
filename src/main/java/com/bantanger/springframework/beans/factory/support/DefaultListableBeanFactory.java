@@ -1,9 +1,9 @@
-package com.bantanger.springframework.beans.factory.support.registry;
+package com.bantanger.springframework.beans.factory.support;
 
 import com.bantanger.springframework.beans.exception.BeansException;
 import com.bantanger.springframework.beans.factory.ConfigurableListableBeanFactory;
 import com.bantanger.springframework.beans.factory.config.definition.BeanDefinition;
-import com.bantanger.springframework.beans.factory.config.processor.BeanPostProcessor;
+import com.bantanger.springframework.beans.factory.config.definition.BeanDefinitionRegistry;
 import com.bantanger.springframework.beans.factory.support.instantiate.AbstractAutowireCapableBeanFactory;
 
 import java.util.HashMap;

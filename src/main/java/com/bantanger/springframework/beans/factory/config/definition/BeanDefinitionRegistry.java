@@ -1,4 +1,4 @@
-package com.bantanger.springframework.beans.factory.support.registry;
+package com.bantanger.springframework.beans.factory.config.definition;
 
 import com.bantanger.springframework.beans.exception.BeansException;
 import com.bantanger.springframework.beans.factory.config.definition.BeanDefinition;

@@ -5,8 +5,10 @@ import com.bantanger.springframework.beans.exception.BeansException;
 import java.util.Map;
 
 /**
- * 扩展 Bean 工厂接口的接口
- * 新增加了 getBeansOfType() 用于区分不同参数的 bean、getBeanDefinitionNames()方法
+ * 由 Bean 工厂实现的 {@link BeanFactory} 接口的扩展，
+ * 该 Bean 工厂可以枚举其所有 Bean 实例，而不是按照客户端的请求尝试按名称逐个查找 Bean。
+ * 预加载所有 Bean 定义的 BeanFactory 实现（例如基于 XML 的工厂）可以实现此接口
+ *
  * 在 Spring 源码中还有其他扩展方法。
  * @author BanTanger 半糖
  * @Date 2023/2/7 21:49

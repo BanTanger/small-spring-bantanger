@@ -5,7 +5,7 @@ import com.bantanger.springframework.beans.factory.config.definition.PropertyVal
 import com.bantanger.springframework.beans.factory.config.definition.PropertyValues;
 import com.bantanger.springframework.beans.factory.config.definition.BeanDefinition;
 import com.bantanger.springframework.beans.factory.config.definition.BeanReference;
-import com.bantanger.springframework.beans.factory.support.registry.DefaultListableBeanFactory;
+import com.bantanger.springframework.beans.factory.support.DefaultListableBeanFactory;
 import com.bantanger.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import com.bantanger.springframework.context.support.ClassPathXmlApplicationContext;
 import com.bantanger.springframework.core.io.load.impl.DefaultResourceLoader;
@@ -103,7 +103,7 @@ public class ApiTest {
         // 1.初始化 BeanFactory
         DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
 
-        // 2. 读取配置文件&注册 Bean
+        // 2. 读取配置文件 & 注册 Bean
         XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(beanFactory);
         reader.loadBeanDefinitions("classpath:spring.xml");
 
@@ -124,12 +124,26 @@ public class ApiTest {
     @Test
     public void test_BeanFactoryPostProcessorAndBeanPostProcessor_useContext() {
         // 1. 初始化 BeanFactory
-        ClassPathXmlApplicationContext classPathXmlApplicationContext = new ClassPathXmlApplicationContext("classpath:springPostProcessor.xml");
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:springPostProcessor.xml");
 
         // 2. 获取 Bean 对象调用方法
-        UserService userService = (UserService) classPathXmlApplicationContext.getBean("userService", UserService.class);
+        UserService userService = applicationContext.getBean("userService", UserService.class);
         String result = userService.queryUserInfo();
         System.out.println("测试结果：" + result);
     }
+
+    @Test
+    public void test_InitAndDestroy() {
+        // 1. 初始化 BeanFactory
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        // 新增注册钩子
+        applicationContext.registerShutdownHook();
+
+        // 2. 获取 Bean 对象调用方法
+        UserService userService = applicationContext.getBean("userService", UserService.class);
+        String result = userService.queryUserInfo();
+        System.out.println("测试结果：" + result);
+    }
+
 
 }
