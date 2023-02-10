@@ -4,7 +4,10 @@ import com.bantanger.springframework.beans.exception.BeansException;
 import com.bantanger.springframework.beans.factory.config.ConfigurableBeanFactory;
 import com.bantanger.springframework.beans.factory.config.definition.BeanDefinition;
 import com.bantanger.springframework.beans.factory.config.processor.BeanPostProcessor;
+import com.bantanger.springframework.beans.factory.support.factorybean.FactoryBean;
+import com.bantanger.springframework.beans.factory.support.factorybean.FactoryBeanRegisterSupport;
 import com.bantanger.springframework.beans.factory.support.singleton.DefaultSingletonBeanRegistry;
+import com.bantanger.springframework.util.ClassUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +19,16 @@ import java.util.List;
  * @author BanTanger 半糖
  * @Date 2023/2/6 19:45
  */
-public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
+public abstract class AbstractBeanFactory extends FactoryBeanRegisterSupport implements ConfigurableBeanFactory {
 
-    /** BeanPostProcessors to apply in createBean */
+    /**
+     * ClassLoader to resolve bean class names with, if necessary
+     */
+    private ClassLoader beanClassLoader = ClassUtils.getDefaultClassLoader();
+
+    /**
+     * BeanPostProcessors to apply in createBean
+     */
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
 
     @Override
@@ -38,15 +48,30 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
 
 
     protected <T> T doGetBean(final String name, final Object[] args) {
-        Object bean = getSingleton(name);
-        if (bean != null) {
-            // 单例 bean 对象已经存在于缓存中，直接获取返回
-            return (T) bean;
+        Object sharedInstance = getSingleton(name);
+        if (sharedInstance != null) {
+            // 如果是 FactoryBean，则需要调用 FactoryBean#getObject
+            return (T) getObjectForBeanInstance(sharedInstance, name);
         }
 
-        // 获取不到 bean，说明是第一次注册，通过 bean 的定义完成实例化操作
         BeanDefinition beanDefinition = getBeanDefinition(name);
-        return (T) createBean(name, beanDefinition, args);
+        Object bean = createBean(name, beanDefinition, args);
+        return (T) getObjectForBeanInstance(bean, name);
+    }
+
+    private Object getObjectForBeanInstance(Object beanInstance, String beanName) {
+        if (!(beanInstance instanceof FactoryBean)) {
+            return beanInstance;
+        }
+
+        Object cachedObjectForFactoryBean = getCachedObjectForFactoryBean(beanName);
+
+        // 如果不存在 Object，调用 getObjectFromFactoryBean 获取 Object
+        if (cachedObjectForFactoryBean == null) {
+            FactoryBean<?> factoryBean = (FactoryBean<?>) beanInstance;
+            cachedObjectForFactoryBean = getObjectFromFactoryBean(factoryBean, beanName);
+        }
+        return cachedObjectForFactoryBean;
     }
 
     /**
@@ -82,6 +107,10 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
      */
     public List<BeanPostProcessor> getBeanPostProcessors() {
         return this.beanPostProcessors;
+    }
+
+    public ClassLoader getBeanClassLoader() {
+        return this.beanClassLoader;
     }
 
 }

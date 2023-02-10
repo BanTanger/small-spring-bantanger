@@ -1,15 +1,11 @@
 package com.bantanger.springframework.test.bean;
 
-import com.bantanger.springframework.beans.exception.BeansException;
-import com.bantanger.springframework.beans.factory.support.manage.DisposableBean;
-import com.bantanger.springframework.beans.factory.support.manage.InitializingBean;
-
 /**
  * 模拟Bean
  * @author BanTanger 半糖
  * @Date 2023/2/6 17:23
  */
-public class UserService implements InitializingBean, DisposableBean {
+public class UserService {
 
     private String uId;
 
@@ -17,7 +13,7 @@ public class UserService implements InitializingBean, DisposableBean {
 
     private String location;
 
-    private UserDao userDao;
+    private IUserDao userDao;
 
     public String queryUserInfo() {
         return userDao.queryUserName(uId) + "," + company + "," + location;
@@ -47,22 +43,12 @@ public class UserService implements InitializingBean, DisposableBean {
         this.location = location;
     }
 
-    public UserDao getUserDao() {
+    public IUserDao getUserDao() {
         return userDao;
     }
 
-    public void setUserDao(UserDao userDao) {
+    public void setUserDao(IUserDao userDao) {
         this.userDao = userDao;
-    }
-
-    @Override
-    public void destroy() throws Exception {
-        System.out.println("执行：UserService.destroy");
-    }
-
-    @Override
-    public void afterPropertiesSet() throws BeansException {
-        System.out.println("执行：UserService.afterPropertiesSet");
     }
 
 }

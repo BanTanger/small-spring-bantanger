@@ -3,6 +3,10 @@ package com.bantanger.springframework.beans.factory.support.instantiate;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.bantanger.springframework.beans.exception.BeansException;
+import com.bantanger.springframework.beans.factory.aware.Aware;
+import com.bantanger.springframework.beans.factory.aware.BeanClassLoaderAware;
+import com.bantanger.springframework.beans.factory.aware.BeanFactoryAware;
+import com.bantanger.springframework.beans.factory.aware.BeanNameAware;
 import com.bantanger.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import com.bantanger.springframework.beans.factory.config.definition.PropertyValue;
 import com.bantanger.springframework.beans.factory.config.definition.PropertyValues;
@@ -46,8 +50,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         // 注册已经实现了 DisposableBean 接口的 Bean 对象
         registerDisposableBeanIfNecessary(beanName, bean, beanDefinition);
 
-        // 将注册好的实例 Bean 存入单例对象缓存中
-        addSingleton(beanName, bean);
+        // 创建修改 Bean 之后判断 bean 到底是单例还是原型模式
+        if (beanDefinition.isSingleton()) {
+            addSingleton(beanName, bean);
+        }
         return bean;
     }
 
@@ -105,6 +111,18 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     }
 
     private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) {
+        if (bean instanceof Aware) {
+            if (bean instanceof BeanFactoryAware) {
+                ((BeanFactoryAware) bean).setBeanFactory(this);
+            }
+            if (bean instanceof BeanClassLoaderAware) {
+                ((BeanClassLoaderAware) bean).setBeanClassLoader(getBeanClassLoader());
+            }
+            if (bean instanceof BeanNameAware) {
+                ((BeanNameAware) bean).setBeanName(beanName);
+            }
+        }
+
         // 1. 执行 BeanPostProcessor Before 处理
         Object wrappedBean = applyBeanPostProcessorBeforeInitialization(bean, beanName);
 
@@ -138,6 +156,11 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     }
 
     protected void registerDisposableBeanIfNecessary(String beanName, Object bean, BeanDefinition beanDefinition) {
+        // 非 Singleton 类型的 Bean 不执行销毁方法
+        if (!beanDefinition.isSingleton()) {
+            return ;
+        }
+
         if (bean instanceof DisposableBean || StrUtil.isNotEmpty(beanDefinition.getDestroyMethodName())) {
             registerDisposableBean(beanName, new DisposableBeanAdapter(bean, beanName, beanDefinition));
         }
