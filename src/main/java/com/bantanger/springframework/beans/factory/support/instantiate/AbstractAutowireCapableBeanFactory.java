@@ -3,6 +3,10 @@ package com.bantanger.springframework.beans.factory.support.instantiate;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.bantanger.springframework.beans.exception.BeansException;
+import com.bantanger.springframework.beans.factory.aware.Aware;
+import com.bantanger.springframework.beans.factory.aware.BeanClassLoaderAware;
+import com.bantanger.springframework.beans.factory.aware.BeanFactoryAware;
+import com.bantanger.springframework.beans.factory.aware.BeanNameAware;
 import com.bantanger.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import com.bantanger.springframework.beans.factory.config.definition.PropertyValue;
 import com.bantanger.springframework.beans.factory.config.definition.PropertyValues;
@@ -105,6 +109,18 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     }
 
     private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) {
+        if (bean instanceof Aware) {
+            if (bean instanceof BeanFactoryAware) {
+                ((BeanFactoryAware) bean).setBeanFactory(this);
+            }
+            if (bean instanceof BeanClassLoaderAware) {
+                ((BeanClassLoaderAware) bean).setBeanClassLoader(getBeanClassLoader());
+            }
+            if (bean instanceof BeanNameAware) {
+                ((BeanNameAware) bean).setBeanName(beanName);
+            }
+        }
+
         // 1. 执行 BeanPostProcessor Before 处理
         Object wrappedBean = applyBeanPostProcessorBeforeInitialization(bean, beanName);
 

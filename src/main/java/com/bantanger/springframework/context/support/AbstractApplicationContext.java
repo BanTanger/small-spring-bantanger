@@ -25,13 +25,16 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         // 2. 获取能分析和修改 Bean 以及预先实例化的 BeanFactory 工厂
         ConfigurableListableBeanFactory beanFactory = getBeanFactory();
 
-        // 3. 在 Bean 实例化之前，执行 BeanFactoryPostProcessor，进而获取或修改 beanDefinition 配置元数据
+        // 3. Spring 添加 ApplicationContextAwareProcessor，让继承了 ApplicationContextAware 的 Bean 对象都能感知所属的 ApplicationContext
+        beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
+
+        // 4. 在 Bean 实例化之前，执行 BeanFactoryPostProcessor，进而获取或修改 beanDefinition 配置元数据
         invokeBeanFactoryPostProcessors(beanFactory);
 
-        // 4. BeanPostProcessor 需要提前于其他的 Bean 对象实例化之前执行注册操作 (执行于 bean 对象实例化之后)
+        // 5. BeanPostProcessor 需要提前于其他的 Bean 对象实例化之前执行注册操作 (执行于 bean 对象实例化之后)
         registerBeanPostProcessors(beanFactory);
 
-        // 5. 提前实例化单例 Bean 对象 (非懒加载的单例 Bean 对象)
+        // 6. 提前实例化单例 Bean 对象 (非懒加载的单例 Bean 对象)
         beanFactory.preInstantiateSingletons();
     }
 

@@ -1,15 +1,24 @@
 package com.bantanger.springframework.test.bean;
 
 import com.bantanger.springframework.beans.exception.BeansException;
+import com.bantanger.springframework.beans.factory.BeanFactory;
+import com.bantanger.springframework.beans.factory.aware.BeanClassLoaderAware;
+import com.bantanger.springframework.beans.factory.aware.BeanFactoryAware;
+import com.bantanger.springframework.beans.factory.aware.BeanNameAware;
 import com.bantanger.springframework.beans.factory.support.manage.DisposableBean;
 import com.bantanger.springframework.beans.factory.support.manage.InitializingBean;
+import com.bantanger.springframework.context.ApplicationContext;
+import com.bantanger.springframework.context.ApplicationContextAware;
 
 /**
  * 模拟Bean
  * @author BanTanger 半糖
  * @Date 2023/2/6 17:23
  */
-public class UserService implements InitializingBean, DisposableBean {
+public class UserService implements BeanNameAware, BeanFactoryAware, BeanClassLoaderAware, ApplicationContextAware {
+
+    private ApplicationContext applicationContext;
+    private BeanFactory beanFactory;
 
     private String uId;
 
@@ -56,13 +65,31 @@ public class UserService implements InitializingBean, DisposableBean {
     }
 
     @Override
-    public void destroy() throws Exception {
-        System.out.println("执行：UserService.destroy");
+    public void setBeanClassLoader(ClassLoader classLoader) {
+        System.out.println("ClassLoader:" + classLoader);
     }
 
     @Override
-    public void afterPropertiesSet() throws BeansException {
-        System.out.println("执行：UserService.afterPropertiesSet");
+    public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
+        this.beanFactory = beanFactory;
+    }
+
+    @Override
+    public void setBeanName(String name) {
+        System.out.println("BeanName:" + name);
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+    }
+
+    public ApplicationContext getApplicationContext() {
+        return applicationContext;
+    }
+
+    public BeanFactory getBeanFactory() {
+        return beanFactory;
     }
 
 }

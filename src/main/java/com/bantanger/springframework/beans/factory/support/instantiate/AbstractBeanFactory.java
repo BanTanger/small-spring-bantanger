@@ -5,6 +5,7 @@ import com.bantanger.springframework.beans.factory.config.ConfigurableBeanFactor
 import com.bantanger.springframework.beans.factory.config.definition.BeanDefinition;
 import com.bantanger.springframework.beans.factory.config.processor.BeanPostProcessor;
 import com.bantanger.springframework.beans.factory.support.singleton.DefaultSingletonBeanRegistry;
+import com.bantanger.springframework.util.ClassUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,8 @@ import java.util.List;
  * @Date 2023/2/6 19:45
  */
 public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
+
+    private ClassLoader beanClassLoader = ClassUtils.getDefaultClassLoader();
 
     /** BeanPostProcessors to apply in createBean */
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
@@ -82,6 +85,10 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
      */
     public List<BeanPostProcessor> getBeanPostProcessors() {
         return this.beanPostProcessors;
+    }
+
+    public ClassLoader getBeanClassLoader() {
+        return this.beanClassLoader;
     }
 
 }
