@@ -13,7 +13,7 @@ import java.util.EventListener;
 public interface ApplicationListener<E extends ApplicationEvent> extends EventListener {
 
     /**
-     * Handle an application event.
+     * 监听器在接受到发布消息后各自需要完成的逻辑
      * @param event the event to respond to
      */
     void onApplicationEvent(E event);
