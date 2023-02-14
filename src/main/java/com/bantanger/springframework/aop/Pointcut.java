@@ -7,7 +7,7 @@ package com.bantanger.springframework.aop;
  * @author BanTanger 半糖
  * @Date 2023/2/13 20:35
  */
-public interface PointCut {
+public interface Pointcut {
 
     /**
      * 返回此切入点的类筛选器。

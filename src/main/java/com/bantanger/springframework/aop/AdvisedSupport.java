@@ -11,6 +11,11 @@ import org.aopalliance.intercept.MethodInterceptor;
 public class AdvisedSupport {
 
     /**
+     * ProxyConfig
+     */
+    private boolean proxyTargetClass = false;
+
+    /**
      * 被代理的目标对象
      * 主要是用于把代理、拦截、匹配的各项属性包装到一个类中，方便在 Proxy 实现类进行使用。
      * 这和你的业务开发中包装入参是一个道理
@@ -29,6 +34,14 @@ public class AdvisedSupport {
      * 这个对象由 AspectJExpressionPointcut 提供服务
      */
     private MethodMatcher methodMatcher;
+
+    public boolean isProxyTargetClass() {
+        return proxyTargetClass;
+    }
+
+    public void setProxyTargetClass(boolean proxyTargetClass) {
+        this.proxyTargetClass = proxyTargetClass;
+    }
 
     public TargetSource getTargetSource() {
         return targetSource;
