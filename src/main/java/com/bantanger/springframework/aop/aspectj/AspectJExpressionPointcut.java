@@ -1,8 +1,8 @@
-package com.bantanger.springframework.aop.asprctj;
+package com.bantanger.springframework.aop.aspectj;
 
 import com.bantanger.springframework.aop.ClassFilter;
 import com.bantanger.springframework.aop.MethodMatcher;
-import com.bantanger.springframework.aop.PointCut;
+import com.bantanger.springframework.aop.Pointcut;
 import org.aspectj.weaver.tools.PointcutExpression;
 import org.aspectj.weaver.tools.PointcutParser;
 import org.aspectj.weaver.tools.PointcutPrimitive;
@@ -12,10 +12,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * 切入点表达式
  * @author BanTanger 半糖
  * @Date 2023/2/13 20:42
  */
-public class AspectJExpressionPointCut implements PointCut, ClassFilter, MethodMatcher {
+public class AspectJExpressionPointcut implements Pointcut, ClassFilter, MethodMatcher {
 
     /**
      * 存储所有匹配的方法切点
@@ -28,7 +29,7 @@ public class AspectJExpressionPointCut implements PointCut, ClassFilter, MethodM
 
     private final PointcutExpression pointcutExpression;
 
-    public AspectJExpressionPointCut(String expression) {
+    public AspectJExpressionPointcut(String expression) {
         PointcutParser pointcutParser = PointcutParser.getPointcutParserSupportingSpecifiedPrimitivesAndUsingSpecifiedClassLoaderForResolution(SUPPORTED_PRIMITIVES, this.getClass().getClassLoader());
         pointcutExpression = pointcutParser.parsePointcutExpression(expression);
     }

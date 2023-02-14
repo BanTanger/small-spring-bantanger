@@ -1,5 +1,6 @@
 package com.bantanger.springframework.beans.factory.config.definition;
 
+
 import com.bantanger.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 /**
@@ -8,7 +9,6 @@ import com.bantanger.springframework.beans.factory.config.ConfigurableBeanFactor
  * @author BanTanger 半糖
  * @Date 2023/2/6 17:14
  */
-@SuppressWarnings({"rawtypes"})
 public class BeanDefinition {
 
     String SCOPE_SINGLETON = ConfigurableBeanFactory.SCOPE_SINGLETON;
@@ -30,8 +30,7 @@ public class BeanDefinition {
     private boolean prototype = false;
 
     public BeanDefinition(Class beanClass) {
-        this.beanClass = beanClass;
-        this.propertyValues = new PropertyValues();
+        this(beanClass, null);
     }
 
     public BeanDefinition(Class beanClass, PropertyValues propertyValues) {

@@ -30,7 +30,6 @@ public class CglibSubclassingInstantiationStrategy implements InstantiationStrat
         if (null == ctor) {
             return enhancer.create();
         }
-        assert ctor != null;
         return enhancer.create(ctor.getParameterTypes(), args);
     }
 
