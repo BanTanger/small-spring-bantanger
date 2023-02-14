@@ -13,6 +13,7 @@ import com.bantanger.springframework.beans.factory.config.definition.PropertyVal
 import com.bantanger.springframework.beans.factory.config.definition.BeanDefinition;
 import com.bantanger.springframework.beans.factory.config.definition.BeanReference;
 import com.bantanger.springframework.beans.factory.config.processor.BeanPostProcessor;
+import com.bantanger.springframework.beans.factory.config.processor.InstantiationAwareBeanPostProcessor;
 import com.bantanger.springframework.beans.factory.support.manage.DisposableBean;
 import com.bantanger.springframework.beans.factory.support.manage.DisposableBeanAdapter;
 import com.bantanger.springframework.beans.factory.support.manage.InitializingBean;
@@ -37,6 +38,14 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     protected Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) throws BeansException {
         Object bean = null;
         try {
+            // 判断是否返回代理 Bean 对象
+            bean = resolveBeforeInstantiation(beanName, beanDefinition);
+            if (null != bean) {
+                // 因为创建的是代理对象不是之前流程里的普通对象，所以我们需要前置于其他对象的创建，
+                // 即需要在 AbstractAutowireCapableBeanFactory#createBean 优先完成 Bean 对象的判断，
+                // 是否需要代理，有则直接返回代理对象
+                return bean;
+            }
             // 从 BeanDefinition 获取 Bean 的类信息，实例化完整的类: 有参无参均可
             bean = createBeanInstance(beanDefinition, beanName, args);
             // 给 Bean 填充属性
@@ -57,6 +66,14 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         return bean;
     }
 
+    protected Object resolveBeforeInstantiation(String beanName, BeanDefinition beanDefinition) {
+        Object bean = applyBeanPostProcessorBeforeInitialization(beanDefinition.getBeanClass(), beanName);
+        if (null != bean) {
+            bean = applyBeanPostProcessorAfterInitialization(bean, beanName);
+        }
+        return bean;
+    }
+
     protected Object createBeanInstance(BeanDefinition beanDefinition, String beanName, Object[] args) {
         Constructor constructorToUse = null;
         Class<?> beanClass = beanDefinition.getBeanClass();
@@ -69,6 +86,17 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             }
         }
         return getInstantiationStrategy().instantiate(beanDefinition, beanName, constructorToUse, args);
+    }
+
+    protected Object applyBeanPostProcessorBeforeInitialization(Class<?> beanClass, String beanName) {
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            if (beanPostProcessor instanceof InstantiationAwareBeanPostProcessor) {
+                // 返回代理对象
+                Object result = ((InstantiationAwareBeanPostProcessor) beanPostProcessor).postProcessBeforeInstantiation(beanClass, beanName);
+                if (null != result) return result;
+            }
+        }
+        return null;
     }
 
     /**
@@ -134,7 +162,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         }
 
         // 2. 执行 BeanPostProcessor After 处理
-        wrappedBean = applyBeanPostProcessorAfterInitialization(bean, beanName);
+        wrappedBean = applyBeanPostProcessorAfterInitialization(wrappedBean, beanName);
         return wrappedBean;
     }
 

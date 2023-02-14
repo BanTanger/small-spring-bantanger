@@ -1,6 +1,8 @@
 package com.bantanger.springframework.context;
 
+import com.bantanger.springframework.beans.factory.HierarchicalBeanFactory;
 import com.bantanger.springframework.beans.factory.ListableBeanFactory;
+import com.bantanger.springframework.core.io.load.ResourceLoader;
 
 /**
  * 应用上下文接口
@@ -8,8 +10,5 @@ import com.bantanger.springframework.beans.factory.ListableBeanFactory;
  * @author BanTanger 半糖
  * @Date 2023/2/7 23:45
  */
-public interface ApplicationContext extends ListableBeanFactory {
-
-    // ApplicationContext 本身是 Central 接口，但目前还不需要添加一些获取ID和父类上下文，所以暂时没有接口方法的定义。
-
+public interface ApplicationContext extends ListableBeanFactory, HierarchicalBeanFactory, ResourceLoader, ApplicationEventPublisher {
 }
