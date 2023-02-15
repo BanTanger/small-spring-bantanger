@@ -65,7 +65,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
      * 注册事件监听器
      */
     private void registerListeners() {
-        // 通过 getBeansOfType 方法获取道所有在 spring.xml 中加载到的事件配置 Bean 对象
+        // 通过 getBeansOfType 方法获取道所有在 spring-property.xml 中加载到的事件配置 Bean 对象
         Collection<ApplicationListener> applicationListeners = getBeansOfType(ApplicationListener.class).values();
         for (ApplicationListener listener : applicationListeners) {
             applicationEventMulticaster.addApplicationLister(listener);

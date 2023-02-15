@@ -1,8 +1,13 @@
 package com.bantanger.springframework.test.bean;
 
+import com.bantanger.springframework.stereotype.Component;
+
 import java.util.Random;
 
+@Component("userService")
 public class UserService implements IUserService {
+
+    private String token;
 
     public String queryUserInfo() {
         try {
@@ -20,6 +25,21 @@ public class UserService implements IUserService {
             e.printStackTrace();
         }
         return "注册用户：" + userName + " success！\n";
+    }
+
+    @Override
+    public String toString() {
+        return "UserService{" +
+                "token='" + token + '\'' +
+                '}';
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
 }
