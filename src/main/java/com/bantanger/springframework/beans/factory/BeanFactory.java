@@ -10,34 +10,12 @@ import com.bantanger.springframework.beans.exception.BeansException;
  */
 public interface BeanFactory {
 
-    /**
-     * 获取 Bean 实例对象
-     *
-     * @param name 注册 Bean 的实例对象名称
-     * @return Bean 实例对象
-     * @throws BeansException 自定义 Bean 异常处理
-     */
     Object getBean(String name) throws BeansException;
 
-    /**
-     * 获取 Bean 实例对象
-     *
-     * @param name 注册 Bean 的实例对象名称
-     * @param args 有参构造的参数列表
-     * @return Bean 实例对象
-     * @throws BeansException 自定义 Bean 异常处理
-     */
     Object getBean(String name, Object... args) throws BeansException;
 
-    /**
-     * 获取 Bean 实例对象
-     *
-     * @param name         注册 Bean 的实例对象名称
-     * @param requiredType 需求类型
-     * @param <T>          泛型
-     * @return 类型
-     * @throws BeansException 自定义 Bean 异常处理
-     */
     <T> T getBean(String name, Class<T> requiredType) throws BeansException;
+
+    <T> T getBean(Class<T> requiredType) throws BeansException;
 
 }

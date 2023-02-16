@@ -8,6 +8,7 @@ import com.bantanger.springframework.beans.factory.support.factorybean.FactoryBe
 import com.bantanger.springframework.beans.factory.support.factorybean.FactoryBeanRegisterSupport;
 import com.bantanger.springframework.beans.factory.support.singleton.DefaultSingletonBeanRegistry;
 import com.bantanger.springframework.util.ClassUtils;
+import com.bantanger.springframework.util.StringValueResolver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,11 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegisterSupport imp
      * BeanPostProcessors to apply in createBean
      */
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
+
+    /**
+     * String resolvers to apply e.g. to annotation attribute values
+     */
+    private final List<StringValueResolver> embeddedValueResolvers = new ArrayList<>();
 
     @Override
     public Object getBean(String name) throws BeansException {
@@ -113,4 +119,17 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegisterSupport imp
         return this.beanClassLoader;
     }
 
+    @Override
+    public void addEmbeddedValueResolver(StringValueResolver stringValueResolver) {
+        this.embeddedValueResolvers.add(stringValueResolver);
+    }
+
+    @Override
+    public String resolveEmbeddedValue(String value) {
+        String result = value;
+        for (StringValueResolver embeddedValueResolver : this.embeddedValueResolvers) {
+            result = embeddedValueResolver.resolveStringValue(result);
+        }
+        return result;
+    }
 }

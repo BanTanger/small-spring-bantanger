@@ -8,6 +8,7 @@ import com.bantanger.springframework.beans.factory.config.definition.PropertyVal
 import com.bantanger.springframework.beans.factory.config.processor.BeanFactoryPostProcessor;
 import com.bantanger.springframework.core.io.load.impl.DefaultResourceLoader;
 import com.bantanger.springframework.core.io.resource.Resource;
+import com.bantanger.springframework.util.StringValueResolver;
 
 import java.util.Properties;
 
@@ -41,27 +42,57 @@ public class PropertyPlaceholderConfigurer implements BeanFactoryPostProcessor {
                 for (PropertyValue propertyValue : propertyValues.getPropertyValues()) {
                     Object value = propertyValue.getValue();
                     if (!(value instanceof String)) continue;
-                    String strVal = (String) value;
-                    StringBuilder bd = new StringBuilder(strVal);
-                    int startIdx = strVal.indexOf(DEFAULT_PLACEHOLDER_PREFIX);
-                    int stopIdx = strVal.indexOf(DEFAULT_PLACEHOLDER_SUFFIX);
-                    if (startIdx != -1 && stopIdx != -1 && startIdx < stopIdx) {
-                        // 从 "{@Value}" 截取 @Value
-                        String propKey = strVal.substring(startIdx + 2, stopIdx);
-                        String propVal = properties.getProperty(propKey);
-                        // 将 "{@Value}" 替换成 "PropVal"
-                        bd.replace(startIdx, stopIdx + 1, propVal);
-                        propertyValues.addPropertyValue(new PropertyValue(propertyValue.getName(), bd.toString()));
-                    }
+                    value = resolvePlaceholder((String) value, properties);
+                    propertyValues.addPropertyValue(new PropertyValue(propertyValue.getName(), value));
                 }
             }
+
+            // 向容器中添加字符串解析器，供解析 @Value 注解使用
+            StringValueResolver valueResolver = new PlaceholderResolvingStringValueResolver(properties);
+            // 将属性值写入 AbstractBeanFactory 的 embeddedValueResolvers 集合中维护
+            beanFactory.addEmbeddedValueResolver(valueResolver);
         } catch (Exception e) {
             throw new BeansException("Could not load properties", e);
         }
+    }
+
+    /**
+     * 解耦 postProcessBeanFactory 的职责，将解析占位符的责任调到专门负责的接口 StringValueResolver
+     * @param value
+     * @param properties
+     * @return
+     */
+    private String resolvePlaceholder(String value, Properties properties) {
+        String strVal = value;
+        StringBuilder builder = new StringBuilder(strVal);
+        int startIdx = strVal.indexOf(DEFAULT_PLACEHOLDER_PREFIX);
+        int stopIdx = strVal.indexOf(DEFAULT_PLACEHOLDER_SUFFIX);
+        if (startIdx != -1 && stopIdx != -1 && startIdx < stopIdx) {
+            // 从 "{token}" 截取出 token
+            String propKey = strVal.substring(startIdx + 2, stopIdx);
+            String propVal = properties.getProperty(propKey);
+            // 将 "{token}" 替换成 "bantanger123456789"
+            builder.replace(startIdx, stopIdx + 1, propVal);
+        }
+        return builder.toString();
     }
 
     public void setLocation(String location) {
         this.location = location;
     }
 
+    private class PlaceholderResolvingStringValueResolver implements StringValueResolver {
+
+        private final Properties properties;
+
+        private PlaceholderResolvingStringValueResolver(Properties properties) {
+            this.properties = properties;
+        }
+
+        @Override
+        public String resolveStringValue(String strVal) {
+            return PropertyPlaceholderConfigurer.this.resolvePlaceholder(strVal, properties);
+        }
+
+    }
 }

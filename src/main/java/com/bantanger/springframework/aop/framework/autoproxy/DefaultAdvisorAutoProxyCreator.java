@@ -6,6 +6,7 @@ import com.bantanger.springframework.aop.framework.ProxyFactory;
 import com.bantanger.springframework.beans.exception.BeansException;
 import com.bantanger.springframework.beans.factory.BeanFactory;
 import com.bantanger.springframework.beans.factory.aware.BeanFactoryAware;
+import com.bantanger.springframework.beans.factory.config.definition.PropertyValues;
 import com.bantanger.springframework.beans.factory.config.processor.InstantiationAwareBeanPostProcessor;
 import com.bantanger.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.aopalliance.aop.Advice;
@@ -54,6 +55,11 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
             // 返回代理对象
             return new ProxyFactory(advisedSupport).getProxy();
         }
+        return null;
+    }
+
+    @Override
+    public PropertyValues postProcessPropertyValues(PropertyValues propertyValues, Object bean, String beanName) {
         return null;
     }
 

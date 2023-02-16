@@ -1,11 +1,11 @@
 package com.bantanger.springframework.context.annotation;
 
 import cn.hutool.core.util.StrUtil;
+import com.bantanger.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
 import com.bantanger.springframework.beans.factory.config.definition.BeanDefinition;
 import com.bantanger.springframework.beans.factory.config.definition.BeanDefinitionRegistry;
 import com.bantanger.springframework.stereotype.Component;
 
-import java.lang.annotation.Annotation;
 import java.util.Set;
 
 /**
@@ -15,6 +15,8 @@ import java.util.Set;
  */
 public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateComponentProvider {
 
+    private final String AUTOWIRED_ANNOTATION = "com.bantanger.springframework.beans.factory.config.processor.InstantiationAwareBeanPostProcessor";
+
     private BeanDefinitionRegistry registry;
 
     public ClassPathBeanDefinitionScanner(BeanDefinitionRegistry registry) {
@@ -22,6 +24,7 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
     }
 
     public void doScan(String... basePackages) {
+        // 处理 @Component
         for (String basePackage : basePackages) {
             Set<BeanDefinition> candidate = findCandidateComponents(basePackage);
             for (BeanDefinition beanDefinition : candidate) {
@@ -34,6 +37,9 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
                 registry.registerBeanDefinition(determineBeanName(beanDefinition), beanDefinition);
             }
         }
+
+        // 处理 @Autowired、@Value
+        registry.registerBeanDefinition(AUTOWIRED_ANNOTATION, new BeanDefinition(AutowiredAnnotationBeanPostProcessor.class));
     }
 
     private String resolveBeanScope(BeanDefinition beanDefinition) {

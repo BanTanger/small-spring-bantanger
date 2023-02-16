@@ -6,6 +6,10 @@
 	         http://www.springframework.org/schema/beans/spring-beans.xsd
 		 http://www.springframework.org/schema/context">
 
+    <bean class="com.bantanger.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:token.properties"/>
+    </bean>
+
     <context:component-scan base-package="com.bantanger.springframework.test.bean"/>
 
 </beans>
