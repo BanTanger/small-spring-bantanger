@@ -52,7 +52,6 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegisterSupport imp
         return (T) getBean(name);
     }
 
-
     protected <T> T doGetBean(final String name, final Object[] args) {
         Object sharedInstance = getSingleton(name);
         if (sharedInstance != null) {
@@ -132,4 +131,5 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegisterSupport imp
         }
         return result;
     }
+
 }

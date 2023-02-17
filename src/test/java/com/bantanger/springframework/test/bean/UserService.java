@@ -1,21 +1,10 @@
 package com.bantanger.springframework.test.bean;
 
-import com.bantanger.springframework.beans.factory.annotation.Autowired;
-import com.bantanger.springframework.beans.factory.annotation.Qualifier;
-import com.bantanger.springframework.beans.factory.annotation.Value;
-import com.bantanger.springframework.stereotype.Component;
-
 import java.util.Random;
 
-@Component("userService")
 public class UserService implements IUserService {
 
-    @Value("${token}")
     private String token;
-
-    @Autowired
-    @Qualifier("userDao")
-    private UserDao userDao;
 
     public String queryUserInfo() {
         try {
@@ -23,7 +12,7 @@ public class UserService implements IUserService {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return userDao.queryUserName("10001") + ", " + token;
+        return "小傅哥，100001，深圳，" + token;
     }
 
     public String register(String userName) {

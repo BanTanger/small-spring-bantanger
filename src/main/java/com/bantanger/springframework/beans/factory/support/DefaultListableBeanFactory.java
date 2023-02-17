@@ -5,6 +5,7 @@ import com.bantanger.springframework.beans.factory.ConfigurableListableBeanFacto
 import com.bantanger.springframework.beans.factory.config.definition.BeanDefinition;
 import com.bantanger.springframework.beans.factory.config.definition.BeanDefinitionRegistry;
 import com.bantanger.springframework.beans.factory.support.instantiate.AbstractAutowireCapableBeanFactory;
+import com.bantanger.springframework.util.StringValueResolver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -82,4 +83,5 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 
         throw new BeansException(requiredType + "expected single bean but found " + beanNames.size() + ": " + beanNames);
     }
+
 }

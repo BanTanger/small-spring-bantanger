@@ -22,6 +22,15 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
     Object postProcessBeforeInstantiation(Class<?> beanClass, String beanName) throws BeansException;
 
     /**
+     * 在 Bean 对象执行实例化（初始化）之后，执行此方法
+     * @param bean
+     * @param beanName
+     * @return
+     * @throws BeansException
+     */
+    boolean postProcessAfterInstantiation(Object bean, String beanName) throws BeansException;
+
+    /**
      * 在 Bean 对象执行实例化（初始化）之后，注入属性操作之前执行此方法
      * 在工厂将给定的属性值应用于给定的 Bean 之前对其进行后处理。允许检查是否满足所有依赖项
      * 例如基于 Bean property setters 上的 "Required" 注释。
@@ -31,5 +40,15 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor {
      * @return
      */
     PropertyValues postProcessPropertyValues(PropertyValues propertyValues, Object bean, String beanName);
+
+//    /**
+//     * 在 Spring 中由 SmartInstantiationAwareBeanPostProcessor#getEarlyBeanReference 提供
+//     * @param bean
+//     * @param beanName
+//     * @return
+//     */
+//    default Object getEarlyBeanReference(Object bean, String beanName) {
+//        return bean;
+//    }
 
 }

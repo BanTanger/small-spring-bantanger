@@ -1,5 +1,7 @@
 package com.bantanger.springframework.aop;
 
+import com.bantanger.springframework.util.ClassUtils;
+
 /**
  * @author BanTanger 半糖
  * @Date 2023/2/13 22:23
@@ -13,12 +15,15 @@ public class TargetSource {
     }
 
     /**
-     * 返回此 {@link TargetSource} 返回的目标类型。
-     * 可以返回 null，尽管 TargetSource 的某些用法可能只适用于预定的目标类。
+     * getTargetClass 是用于获取 target 对象的接口信息的，
+     * 那么这个 target 可能是 JDK代理 创建也可能是 CGlib创建，
+     * 为了保证都能正确的获取到结果，这里需要增加判读 ClassUtils.isCglibProxyClass(clazz)
      * @return
      */
     public Class<?>[] getTargetClass() {
-        return this.target.getClass().getInterfaces();
+        Class<?> clazz = this.target.getClass();
+        clazz = ClassUtils.isCglibProxyClass(clazz) ? clazz.getSuperclass() : clazz;
+        return clazz.getInterfaces();
     }
 
     /**
