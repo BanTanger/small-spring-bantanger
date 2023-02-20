@@ -92,7 +92,7 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
             advisedSupport.setTargetSource(targetSource);
             advisedSupport.setMethodInterceptor((MethodInterceptor) advisor.getAdvice());
             advisedSupport.setMethodMatcher(advisor.getPointcut().getMethodMatcher());
-            advisedSupport.setProxyTargetClass(false);
+            advisedSupport.setProxyTargetClass(true);
 
             // 返回代理对象
             return new ProxyFactory(advisedSupport).getProxy();
@@ -100,11 +100,11 @@ public class DefaultAdvisorAutoProxyCreator implements InstantiationAwareBeanPos
         return bean;
     }
 
-//    @Override
-//    public Object getEarlyBeanReference(Object bean, String beanName) {
-//        earlyProxyReference.add(beanName);
-//        return wrapIfNecessary(bean, beanName);
-//    }
+    @Override
+    public Object getEarlyBeanReference(Object bean, String beanName) {
+        earlyProxyReference.add(beanName);
+        return wrapIfNecessary(bean, beanName);
+    }
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
