@@ -1,19 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <beans>
 
-    <bean id="userService" class="com.bantanger.springframework.test.bean.UserService"/>
+    <!--配置三个事件监听器-->
 
-    <bean class="com.bantanger.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>
+    <!--监听刷新事件-->
+    <bean class="com.bantanger.springframework.test.event.ContextRefreshedEventListener"/>
 
-    <bean id="beforeAdvice" class="com.bantanger.springframework.test.bean.UserServiceBeforeAdvice"/>
+    <!--监听关闭事件-->
+    <bean class="com.bantanger.springframework.test.event.ContextClosedEventListener"/>
 
-    <bean id="methodInterceptor" class="com.bantanger.springframework.aop.framework.adapter.MethodBeforeAdviceInterceptor">
-        <property name="advice" ref="beforeAdvice"/>
-    </bean>
-
-    <bean id="pointcutAdvisor" class="com.bantanger.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">
-        <property name="expression" value="execution(* com.bantanger.springframework.test.bean.IUserService.*(..))"/>
-        <property name="advice" ref="methodInterceptor"/>
-    </bean>
+    <!--监听自定义事件-->
+    <bean class="com.bantanger.springframework.test.event.CustomEventListener"/>
 
 </beans>
